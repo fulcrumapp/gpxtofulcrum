@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const argv = require('yargs').argv;
+const fs = require('fs');
+const toGeoJSON = require('togeojson');
+const DOMParser = require('xmldom').DOMParser;
+
+if (argv._[0]) {
+  const filePath = argv._[0];
+
+  const fileData = fs.readFileSync(filePath).toString();
+
+  const dom = (new DOMParser()).parseFromString(fileData, 'text/xml');
+
+  const geoJSON = toGeoJSON.gpx(dom);
+
+  const timestamps = geoJSON.features[0].properties.coordTimes;
+
+  const output = {
+    tracks: [ { track: [] } ]
+  };
+
+  for (let i = 0; i < geoJSON.features[0].geometry.coordinates.length; ++i) {
+    const point = geoJSON.features[0].geometry.coordinates[i];
+
+    output.tracks[0].track.push([
+      new Date(timestamps[i]).getTime(), point[1], point[0], point[2], null, null, null, null, null, null
+    ]);
+  }
+
+  console.log(JSON.stringify(output));
+}

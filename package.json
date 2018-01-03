@@ -1,0 +1,12 @@
+{
+  "name": "gpxtofulcrum",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": "./gpxtofulcrum",
+  "dependencies": {
+    "togeojson": "^0.16.0",
+    "xmldom": "^0.1.27",
+    "yargs": "^10.0.3"
+  }
+}
